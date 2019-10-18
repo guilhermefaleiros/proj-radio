@@ -25,6 +25,7 @@ export default class extends Component{
           <ImageBackground style={{height: 70, width: 70, alignItems: 'center', justifyContent: 'center'}}
                 source={require('./src/imgs/play-fundo.png')}>
                  {this.state.isPlaying  ? <Icon name="pause" size={30} color="gray"/> : <Image style={{marginLeft:5}}source={require('./src/imgs/play.png')}/>}
+                 <Text>oLÁ</Text>
           </ImageBackground>
         </View>
         </TWF>
