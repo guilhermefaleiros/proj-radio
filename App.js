@@ -2,35 +2,60 @@ import LinearGradient from 'react-native-linear-gradient';
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Image, ImageBackground, TouchableWithoutFeedback as TWF} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
+import Share, {ShareSheet, Button} from 'react-native-share';
 
 export default class extends Component{
   state = {
-    isPlaying: true
+    isPlaying: true // Controla o estado da rádio.
   }
 
+  // Função que faz o botão pause/play alternar a cada toque na tela //
   playOrPause(){
     this.setState({isPlaying: !this.state.isPlaying})
   }
+  /*************************************************/
   
  render(){
+   
    return(
      <View style={{height:'100%', width: '100%'}}>
-       <Image source={require('./src/imgs/Imagem-mulher2.png')} style={{flex:4, width:'100%'}}/>
-      <LinearGradient style={{width:'100%', flex:6}}  colors={['#ccb611', '#ccb650']}>
+      <Image source={require('./src/imgs/Imagem-mulher2.png')} style={{flex:4, width:'100%'}}/>
+      <LinearGradient style={{width:'100%', flex:6}}  colors={['#EEE5A2', '#E9CD6A','#E3C04D']}>
+
+      {/* Aqui está contida a logo principal */}
         <View style={styles.containerLogo}>
             <Image style={{width: 130}} source={require('./src/imgs/logomarca.png')}/>
         </View>
-        <TWF onPress={() => {this.playOrPause()}}>
+      {/********************************************/}
+
+
+      {/* Aqui está contido o botão de play/pause */}
         <View style={styles.containerPlay}>
-          <ImageBackground style={{height: 70, width: 70, alignItems: 'center', justifyContent: 'center'}}
-                source={require('./src/imgs/play-fundo.png')}>
-                 {this.state.isPlaying  ? <Icon name="pause" size={30} color="gray"/> : <Image style={{marginLeft:5}}source={require('./src/imgs/play.png')}/>}
-                 <Text>oLÁ</Text>
-          </ImageBackground>
+          <TWF onPress={() => {this.playOrPause()}}>
+            <View>
+              <ImageBackground style={{height: 90, width: 90, alignItems: 'center', justifyContent: 'center'}}
+                    source={require('./src/imgs/play-fundo.png')}>
+                    {this.state.isPlaying  ? <Icon name="pause" size={30} color="gray"/> : <Image style={{marginLeft:5}}source={require('./src/imgs/play.png')}/>}
+              </ImageBackground> 
+            </View>
+          </TWF>
         </View>
-        </TWF>
+      {/*******************************************/}
+
+
+      {/* Aqui está contido o botão para compartilhamento*/}
+        <View style={{position: 'absolute', top:'80%', marginLeft:20}}>
+          <View style={styles.containerShare}>
+            <TWF>
+                <Icon name="share-square-o" size={30} color="black"/>
+            </TWF>
+          </View>
+        </View>
+      {/**************************************************/}
+
       </LinearGradient>
     </View>
+    
    )
  }
 }
@@ -53,11 +78,19 @@ const styles = StyleSheet.create({
    top: '-25%',
    left: '30%'
  },
- containerPlay:{
-   position: 'absolute',
-   justifyContent: 'center',
-   alignItems: 'center',
-   left: '43%',
-   top: '40%'
- }
+  containerPlay:{
+    marginTop: '30%',
+    justifyContent: 'center',
+    alignItems: 'center',
+ },
+  containerShare:{
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    backgroundColor: '#d6d3d3',
+    justifyContent: 'center',
+    borderWidth: 4,
+    borderColor: 'black',
+    borderRadius: 50
+  }
 });
