@@ -6,7 +6,7 @@ import Share, {ShareSheet, Button} from 'react-native-share';
 
 export default class extends Component{
   state = {
-    isPlaying: true // Controla o estado da rádio.
+    isPlaying: true, // Controla o estado da rádio.
   }
 
   // Função que faz o botão pause/play alternar a cada toque na tela //
@@ -14,10 +14,19 @@ export default class extends Component{
     this.setState({isPlaying: !this.state.isPlaying})
   }
   /*************************************************/
-  
+
  render(){
    
-   return(
+  const shareText = {
+    title: "Compartilhe a Rádio Moloco com seus amigos!",
+    message: "Que massa! Você está na Moloco, e a partir de agora está conectado conosco, curta nossa rádio!",
+    url: "http://facebook.github.io/react-native/",
+    subject: "Rádio Moloco" //  for email
+  }
+
+  
+   
+  return(
      <View style={{height:'100%', width: '100%'}}>
       <Image source={require('./src/imgs/Imagem-mulher2.png')} style={{flex:4, width:'100%'}}/>
       <LinearGradient style={{width:'100%', flex:6}}  colors={['#EEE5A2', '#E9CD6A','#E3C04D']}>
@@ -43,14 +52,20 @@ export default class extends Component{
       {/*******************************************/}
 
 
-      {/* Aqui está contido o botão para compartilhamento*/}
+      {/* Aqui está contido o botão para compartilhamento.
+          A função Share.open(shareText) abre uma aba na parte inferior da tela
+          que mostra opções de compartilhamento da mensagem "shareText" que foi definida
+          como um objeto no início do código
+      */}
+
         <View style={{position: 'absolute', top:'80%', marginLeft:20}}>
           <View style={styles.containerShare}>
-            <TWF>
+            <TWF onPress={() => Share.open(shareText)}>
                 <Icon name="share-square-o" size={30} color="black"/>
             </TWF>
           </View>
         </View>
+          
       {/**************************************************/}
 
       </LinearGradient>
