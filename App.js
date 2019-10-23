@@ -16,6 +16,19 @@ TrackPlayer.setupPlayer().then(async () => {
   TrackPlayer.play()
 });
 
+TrackPlayer.updateOptions({
+  // Whether the player should stop running when the app is closed on Android
+  stopWithApp: true,
+  capabilities: [
+      TrackPlayer.CAPABILITY_PLAY,
+      TrackPlayer.CAPABILITY_PAUSE
+  ],
+  compactCapabilities: [
+      TrackPlayer.CAPABILITY_PLAY,
+      TrackPlayer.CAPABILITY_PAUSE
+  ]
+});
+
 export default class extends Component{
   state = {
     isPlaying: true, // Controla o estado da rádio.
