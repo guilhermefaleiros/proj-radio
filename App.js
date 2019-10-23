@@ -3,6 +3,18 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Image, ImageBackground, TouchableWithoutFeedback as TWF} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Share, {ShareSheet, Button} from 'react-native-share';
+import TrackPlayer from 'react-native-track-player'
+
+TrackPlayer.setupPlayer().then(async () => {
+  await TrackPlayer.add({
+      id: 'trackId',
+      url: 'http://suaradio1.dyndns.ws:8974/stream',
+      title: 'Rádio Moloco',
+      artist: 'Você está conectado conosco!',
+      artwork: require('./src/imgs/logomarca.png')
+  });
+  TrackPlayer.play()
+});
 
 export default class extends Component{
   state = {
@@ -11,6 +23,12 @@ export default class extends Component{
 
   // Função que faz o botão pause/play alternar a cada toque na tela //
   playOrPause(){
+    if(this.state.isPlaying===true){
+      TrackPlayer.pause()
+    }
+    else{
+      TrackPlayer.play()
+    }
     this.setState({isPlaying: !this.state.isPlaying})
   }
   /*************************************************/
