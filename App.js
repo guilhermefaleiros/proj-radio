@@ -4,40 +4,49 @@ import {Platform, StyleSheet, Text, View, Image, ImageBackground, TouchableWitho
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Share, {ShareSheet, Button} from 'react-native-share';
 import TrackPlayer from 'react-native-track-player'
+import RNExitApp from 'react-native-exit-app';
 
+
+// Esta função cria a conexão com a rádio ao abrir o aplicativo
 TrackPlayer.setupPlayer().then(async () => {
   await TrackPlayer.add({
       id: 'trackId',
-      url: 'http://suaradio1.dyndns.ws:8974/stream',
+      url: 'http://suaradio1.dyndns.ws:8974/stream', // Link da rádio
       title: 'Rádio Moloco',
       artist: 'Você está conectado conosco!',
       artwork: require('./src/imgs/logomarca.png')
   });
   TrackPlayer.play()
-});
+})
+//**************************************/
 
+// Define as opções do playback da rádio
 TrackPlayer.updateOptions({
-  // Whether the player should stop running when the app is closed on Android
-  stopWithApp: true,
+  stopWithApp: false,
   capabilities: [
       TrackPlayer.CAPABILITY_PLAY,
       TrackPlayer.CAPABILITY_PAUSE
   ],
   compactCapabilities: [
       TrackPlayer.CAPABILITY_PLAY,
-      TrackPlayer.CAPABILITY_PAUSE
+      TrackPlayer.CAPABILITY_PAUSE,
+      TrackPlayer.CAPABILITY_STOP
   ]
 });
+//************************************/
 
 export default class extends Component{
   state = {
-    isPlaying: true, // Controla o estado da rádio.
+    isPlaying: true, // Controla o estado da rádio para os componentes da tela
   }
 
-  // Função que faz o botão pause/play alternar a cada toque na tela //
+  // Função que faz o botão pause/play alternar a cada toque na tela
   playOrPause(){
     if(this.state.isPlaying===true){
-      TrackPlayer.pause()
+     // TrackPlayer.stop()
+     // TrackPlayer.destroy()
+     // RNExitApp.exitApp()
+     TrackPlayer.pause()
     }
     else{
       TrackPlayer.play()
@@ -46,21 +55,41 @@ export default class extends Component{
   }
   /*************************************************/
 
+  // Função que "mata" a instância do aplicativo 
+  killApp(){
+    TrackPlayer.stop()
+    TrackPlayer.destroy()
+    RNExitApp.exitApp()
+  }
+  /*********************************************/
+
  render(){
-   
+
+  // Estrutura da mensagem que é compartilhada pelas redes sociais.
   const shareText = {
     title: "Compartilhe a Rádio Moloco com seus amigos!",
     message: "Que massa! Você está na Moloco, e a partir de agora está conectado conosco, curta nossa rádio!",
     url: "http://facebook.github.io/react-native/",
-    subject: "Rádio Moloco" //  for email
+    subject: "Rádio Moloco"
   }
+  //***********************************************************/
 
-  
-   
   return(
      <View style={{height:'100%', width: '100%'}}>
-      <Image source={require('./src/imgs/Imagem-mulher2.png')} style={{flex:4, width:'100%'}}/>
-      <LinearGradient style={{width:'100%', flex:6}}  colors={['#EEE5A2', '#E9CD6A','#E3C04D']}>
+      <ImageBackground source={require('./src/imgs/Imagem-mulher2.png')} style={{flex:4, width:'100%'}}>
+
+        {/*Aqui está contido o botão para fechar o aplicativo */}
+          <View  style={{alignItems:'flex-end', padding:10}}>
+            <TWF onPress={() => {this.killApp()}}>
+              <View style={styles.containerClose}>
+                  <Icon name="close" size={30} color="red"/>
+              </View>
+            </TWF>
+          </View>
+        {/****************************************************8*/}
+      </ImageBackground>
+
+      <LinearGradient style={styles.containerGradient} colors={['#EEE5A2', '#E9CD6A','#E3C04D']}>
 
       {/* Aqui está contida a logo principal */}
         <View style={styles.containerLogo}>
@@ -89,7 +118,7 @@ export default class extends Component{
           como um objeto no início do código
       */}
 
-        <View style={{position: 'absolute', top:'80%', marginLeft:20}}>
+        <View style={{position: 'absolute', top:'80%', left:'4%', alignItems:'flex-start'}}>
           <View style={styles.containerShare}>
             <TWF onPress={() => Share.open(shareText)}>
                 <Icon name="share-square-o" size={30} color="black"/>
@@ -120,12 +149,10 @@ const styles = StyleSheet.create({
    justifyContent: 'center',
    borderWidth: 4,
    borderColor: '#B0ADAA',
-   position: 'absolute',
-   top: '-25%',
-   left: '30%'
+   position:'absolute',
+   top: '-25%'
  },
   containerPlay:{
-    marginTop: '30%',
     justifyContent: 'center',
     alignItems: 'center',
  },
@@ -138,5 +165,21 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: 'black',
     borderRadius: 50
+  },
+  containerClose:{
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    backgroundColor: '#d6d3d3',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'black',
+    borderRadius: 50
+  },
+  containerGradient:{
+    width:'100%',
+    flex:6,
+    alignItems: 'center',
+    justifyContent:'center'
   }
 });
