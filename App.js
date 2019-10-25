@@ -1,8 +1,8 @@
 import LinearGradient from 'react-native-linear-gradient';
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Image, ImageBackground, TouchableWithoutFeedback as TWF} from 'react-native';
+import {StyleSheet, View, Image, ImageBackground, TouchableWithoutFeedback as TWF} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import Share, {ShareSheet, Button} from 'react-native-share';
+import Share from 'react-native-share';
 import TrackPlayer from 'react-native-track-player'
 import RNExitApp from 'react-native-exit-app';
 
