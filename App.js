@@ -37,7 +37,7 @@ TrackPlayer.updateOptions({
 
 export default class extends Component{
   state = {
-    isPlaying: true, // Controla o estado da rádio para os componentes da tela
+    isPlaying: true // Controla o estado da rádio para os componentes da tela
   }
 
   // Função que faz o botão pause/play alternar a cada toque na tela
@@ -69,7 +69,7 @@ export default class extends Component{
   const shareText = {
     title: "Compartilhe a Rádio Moloco com seus amigos!",
     message: "Que massa! Você está na Moloco, e a partir de agora está conectado conosco, curta nossa rádio!",
-    url: "http://facebook.github.io/react-native/",
+    url: "http://moloco.vipradios.net.br",
     subject: "Rádio Moloco"
   }
   //***********************************************************/
