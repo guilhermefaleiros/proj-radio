@@ -43,9 +43,6 @@ export default class extends Component{
   // Função que faz o botão pause/play alternar a cada toque na tela
   playOrPause(){
     if(this.state.isPlaying===true){
-     // TrackPlayer.stop()
-     // TrackPlayer.destroy()
-     // RNExitApp.exitApp()
      TrackPlayer.pause()
     }
     else{
@@ -70,7 +67,7 @@ export default class extends Component{
     title: "Compartilhe a Rádio Moloco com seus amigos!",
     message: "Que massa! Você está na Moloco, e a partir de agora está conectado conosco, curta nossa rádio!",
     url: "http://moloco.vipradios.net.br",
-    subject: "Rádio Moloco"
+    subject: "Rádio Moloco!"
   }
   //***********************************************************/
 
