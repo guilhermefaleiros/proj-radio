@@ -6,7 +6,8 @@ import {
   Image,
   ImageBackground,
   TouchableWithoutFeedback as TWF,
-  Dimensions
+  Dimensions,
+  Linking
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Share from "react-native-share";
@@ -63,6 +64,12 @@ export default class extends Component {
   /*********************************************/
 
   render() {
+    const shareOptions = {
+      title: 'Share via',
+      message: 'some message',
+      social: Share.Social.WHATSAPP,
+      whatsAppNumber: "5562982498044"
+    }
     // Estrutura da mensagem que é compartilhada pelas redes sociais.
     const shareText = {
       title: "Compartilhe a Rádio Moloco com seus amigos!",
@@ -84,7 +91,22 @@ export default class extends Component {
             style={{ height: Dimensions.get('window').height*0.4, width: "100%" }}
           >
             {/*Aqui está contido o botão para fechar o aplicativo */}
-            <View style={{ alignItems: "flex-end", padding: 10, marginTop: 25 }}>
+            <View style={{padding: 10, marginTop: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+              <View style={styles.containerShare}>
+                <TWF onPress={() => Linking.openURL(`whatsapp://send?text=&phone=5562985583695`)}>
+                  <Icon name="whatsapp" size={35} color="black" />
+                </TWF>
+              </View>
+              <View style={styles.containerShare}>
+                <TWF onPress={() => {}}>
+                  <Icon name="facebook-square" size={30} color="black" />
+                </TWF>
+              </View>
+              <View style={styles.containerShare}>
+                <TWF onPress={() => Linking.openURL('https://www.instagram.com/radio_moloco/')}>
+                  <Icon name="instagram" size={30} color="black" />
+                </TWF>
+              </View>
               <TWF
                 onPress={() => {
                   this.killApp();
@@ -145,17 +167,17 @@ export default class extends Component {
 
           <View
             style={{
-              position: "absolute",
-              top: "80%",
-              left: "4%",
-              alignItems: "flex-start"
+              flexDirection: 'row',
+              marginTop: 30
+          
             }}
           >
             <View style={styles.containerShare}>
               <TWF onPress={() => Share.open(shareText)}>
-                <Icon name="share-square-o" size={30} color="black" />
+                <Icon name="share-alt" size={30} color="black" />
               </TWF>
             </View>
+            
           </View>
 
           {/**************************************************/}
@@ -186,7 +208,7 @@ const styles = StyleSheet.create({
   containerPlay: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 100
+    marginTop: 50
   },
   containerShare: {
     width: 60,
@@ -196,7 +218,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 4,
     borderColor: "black",
-    borderRadius: 50
+    borderRadius: 50,
+    margin: 10
   },
   containerClose: {
     width: 50,
@@ -206,7 +229,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 2,
     borderColor: "black",
-    borderRadius: 50
+    borderRadius: 50,
+    marginLeft: 10,
   },
   containerGradient: {
     width: "100%",
