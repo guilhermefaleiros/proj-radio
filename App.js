@@ -84,7 +84,7 @@ export default class extends Component {
             style={{ height: Dimensions.get('window').height*0.4, width: "100%" }}
           >
             {/*Aqui está contido o botão para fechar o aplicativo */}
-            <View style={{ alignItems: "flex-end", padding: 10 }}>
+            <View style={{ alignItems: "flex-end", padding: 10, marginTop: 25 }}>
               <TWF
                 onPress={() => {
                   this.killApp();
