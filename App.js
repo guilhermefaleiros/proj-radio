@@ -7,14 +7,15 @@ import {
   ImageBackground,
   TouchableWithoutFeedback as TWF,
   Dimensions,
-  Linking
+  Linking,
+  TouchableOpacity as TO,
+  Alert
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Share from "react-native-share";
 import TrackPlayer from "react-native-track-player";
 import RNExitApp from "react-native-exit-app";
 
-// Esta função cria a conexão com a rádio ao abrir o aplicativo
 TrackPlayer.setupPlayer().then(async () => {
   await TrackPlayer.add({
     id: "trackId",
@@ -23,28 +24,24 @@ TrackPlayer.setupPlayer().then(async () => {
     artist: "Você está conectado conosco!",
     artwork: require("./src/imgs/logomarca.png")
   });
-  TrackPlayer.play();
+  await TrackPlayer.play();
 });
-//**************************************/
 
-// Define as opções do playback da rádio
 TrackPlayer.updateOptions({
   stopWithApp: false,
   capabilities: [TrackPlayer.CAPABILITY_PLAY, TrackPlayer.CAPABILITY_PAUSE],
   compactCapabilities: [
     TrackPlayer.CAPABILITY_PLAY,
-    TrackPlayer.CAPABILITY_PAUSE,
-    TrackPlayer.CAPABILITY_STOP
+    TrackPlayer.CAPABILITY_PAUSE
   ]
 });
-//************************************/
 
-export default class extends Component {
+export default class App extends Component {
+  
   state = {
-    isPlaying: true // Controla o estado da rádio para os componentes da tela
+    isPlaying: true
   };
 
-  // Função que faz o botão pause/play alternar a cada toque na tela
   playOrPause() {
     if (this.state.isPlaying === true) {
       TrackPlayer.pause();
@@ -53,32 +50,30 @@ export default class extends Component {
     }
     this.setState({ isPlaying: !this.state.isPlaying });
   }
-  /*************************************************/
 
-  // Função que "mata" a instância do aplicativo
   killApp() {
     TrackPlayer.stop();
     TrackPlayer.destroy();
     RNExitApp.exitApp();
   }
-  /*********************************************/
 
-  render() {
-    const shareOptions = {
-      title: 'Share via',
-      message: 'some message',
-      social: Share.Social.WHATSAPP,
-      whatsAppNumber: "5562982498044"
-    }
-    // Estrutura da mensagem que é compartilhada pelas redes sociais.
+  async handleShare(){
     const shareText = {
       title: "Compartilhe a Rádio Moloco com seus amigos!",
       message:
         "Que massa! Você está na Moloco, e a partir de agora está conectado conosco, curta nossa rádio!",
       url: "http://moloco.vipradios.net.br",
-      subject: "Rádio Moloco!"
+      subject: "Rádio Moloco!",
+      failOnCancel: false
     };
-    //***********************************************************/
+    await Share.open(shareText)
+  }
+
+  render() {
+
+    const whatsappLink = 'whatsapp://send?text=&phone=5562985583695'
+    const facebookLink = `https://www.facebook.com/radiomoloco/`
+    const instagramLink = 'https://www.instagram.com/radio_moloco/'
 
     return (
       <View style={{ height: Dimensions.get('window').height, width: "100%" }}>
@@ -90,45 +85,63 @@ export default class extends Component {
             source={require("./src/imgs/Imagem-mulher2.png")}
             style={{ height: Dimensions.get('window').height*0.4, width: "100%" }}
           >
-            {/*Aqui está contido o botão para fechar o aplicativo */}
+            
             <View style={{padding: 10, marginTop: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
               <View style={styles.containerShare}>
-                <TWF onPress={() => Linking.openURL(`whatsapp://send?text=&phone=5562985583695`)}>
+                <TO onPress={() => Linking.canOpenURL(whatsappLink)
+                                    .then(supported =>{
+                                      if(supported){
+                                        Linking.openURL(whatsappLink)
+                                      }
+                                      else{
+                                        Alert.alert("Não é possível realizar essa ação",
+                                         "Você não possui whatsapp em seu dispositivo! Baixe e tente novamente")
+                                      }
+                                    }).catch(e => console.log(e))
+                                    }>
                   <Icon name="whatsapp" size={35} color="black" />
-                </TWF>
+                </TO>
               </View>
               <View style={styles.containerShare}>
-                <TWF onPress={() => {}}>
+                <TO onPress={() => Linking.openURL(facebookLink)}>
                   <Icon name="facebook-square" size={30} color="black" />
-                </TWF>
+                </TO>
               </View>
               <View style={styles.containerShare}>
-                <TWF onPress={() => Linking.openURL('https://www.instagram.com/radio_moloco/')}>
+                <TO onPress={() => Linking.openURL(instagramLink)}>
                   <Icon name="instagram" size={30} color="black" />
-                </TWF>
+                </TO>
               </View>
-              <TWF
+              <TO
                 onPress={() => {
-                  this.killApp();
+                  Alert.alert("Tem certeza?", "Deseja realmente sair do aplicativo?", [
+                    {
+                      text: 'Sim', onPress: () => this.killApp()
+                    },
+                    {
+                      text: 'Cancelar',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                  ])
                 }}
               >
                 <View style={styles.containerClose}>
                   <Icon name="close" size={30} color="red" />
                 </View>
-              </TWF>
+              </TO>
             </View>
-            {/****************************************************8*/}
+            {alert.alert}
+      
           </ImageBackground>
-          {/* Aqui está contida a logo principal */}
+      
           <View style={styles.containerLogo}>
             <Image
               style={{ width: 130 }}
               source={require("./src/imgs/logomarca.png")}
             />
           </View>
-          {/********************************************/}
-
-          {/* Aqui está contido o botão de play/pause */}
+         
           <View style={styles.containerPlay}>
             <TWF
               onPress={() => {
@@ -157,30 +170,24 @@ export default class extends Component {
               </View>
             </TWF>
           </View>
-          {/*******************************************/}
-
-          {/* Aqui está contido o botão para compartilhamento.
-          A função Share.open(shareText) abre uma aba na parte inferior da tela
-          que mostra opções de compartilhamento da mensagem "shareText" que foi definida
-          como um objeto no início do código
-      */}
-
+         
           <View
             style={{
               flexDirection: 'row',
-              marginTop: 30
-          
+              marginTop: Dimensions.get('window').width*0.03,
+              display:'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start'
             }}
           >
             <View style={styles.containerShare}>
-              <TWF onPress={() => Share.open(shareText)}>
+              <TO onPress={() => this.handleShare()}>
                 <Icon name="share-alt" size={30} color="black" />
-              </TWF>
+              </TO>
             </View>
             
           </View>
 
-          {/**************************************************/}
         </LinearGradient>
       </View>
     );
@@ -200,7 +207,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#EDE9C1",
     justifyContent: "center",
     borderWidth: 4,
-    borderColor: "#B0ADAA",
+    //borderColor: "#B0ADAA",
+    borderColor: "#000000",
     marginTop: -75
     //position: "absolute",
     //top: "-25%"
@@ -208,7 +216,7 @@ const styles = StyleSheet.create({
   containerPlay: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50
+    marginTop: Dimensions.get('window').width*0.10
   },
   containerShare: {
     width: 60,
