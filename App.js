@@ -9,7 +9,9 @@ import {
   Dimensions,
   Linking,
   TouchableOpacity as TO,
-  Alert
+  Alert,
+  Text,
+  Platform
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Share from "react-native-share";
@@ -36,6 +38,10 @@ TrackPlayer.updateOptions({
   ]
 });
 
+const shareLink = (Platform.OS == 'ios'
+                  ?  'https://apps.apple.com/br/app/r%C3%A1dio-moloco/id1489473868'
+                  : 'https://play.google.com/store/apps/details?id=br.com.radiomoloco')
+
 export default class App extends Component {
   
   state = {
@@ -56,13 +62,13 @@ export default class App extends Component {
     TrackPlayer.destroy();
     RNExitApp.exitApp();
   }
-
+  
   async handleShare(){
     const shareText = {
       title: "Compartilhe a Rádio Moloco com seus amigos!",
       message:
         "Que massa! Você está na Moloco, e a partir de agora está conectado conosco, curta nossa rádio!",
-      url: "http://moloco.vipradios.net.br",
+      url: shareLink,
       subject: "Rádio Moloco!",
       failOnCancel: false
     };
@@ -70,11 +76,11 @@ export default class App extends Component {
   }
 
   render() {
-
     const whatsappLink = 'whatsapp://send?text=&phone=5562985583695'
     const facebookLink = `https://www.facebook.com/radiomoloco/`
     const instagramLink = 'https://www.instagram.com/radio_moloco/'
-
+    const siteLink = 'https://radiomoloco.vipfm.net/'
+   
     return (
       <View style={{ height: Dimensions.get('window').height, width: "100%" }}>
         <LinearGradient
@@ -87,7 +93,6 @@ export default class App extends Component {
           >
             
             <View style={{padding: 10, marginTop: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-              <View style={styles.containerShare}>
                 <TO onPress={() => Linking.canOpenURL(whatsappLink)
                                     .then(supported =>{
                                       if(supported){
@@ -99,46 +104,25 @@ export default class App extends Component {
                                       }
                                     }).catch(e => console.log(e))
                                     }>
-                  <Icon name="whatsapp" size={35} color="black" />
+                  <Icon style={styles.containerIcons} name="whatsapp" size={60} color="yellow" />
                 </TO>
-              </View>
-              <View style={styles.containerShare}>
+            
+              
                 <TO onPress={() => Linking.openURL(facebookLink)}>
-                  <Icon name="facebook-square" size={30} color="black" />
+                  <Icon style={styles.containerIcons} name="facebook-square" size={60} color="yellow" />
                 </TO>
-              </View>
-              <View style={styles.containerShare}>
+              
                 <TO onPress={() => Linking.openURL(instagramLink)}>
-                  <Icon name="instagram" size={30} color="black" />
+                  <Icon style={styles.containerIcons} name="instagram" size={60} color="yellow" />
                 </TO>
-              </View>
-              <TO
-                onPress={() => {
-                  Alert.alert("Tem certeza?", "Deseja realmente sair do aplicativo?", [
-                    {
-                      text: 'Sim', onPress: () => this.killApp()
-                    },
-                    {
-                      text: 'Cancelar',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                  ])
-                }}
-              >
-                <View style={styles.containerClose}>
-                  <Icon name="close" size={30} color="red" />
                 </View>
-              </TO>
-            </View>
-            {alert.alert}
-      
+    
           </ImageBackground>
       
           <View style={styles.containerLogo}>
             <Image
-              style={{ width: 130 }}
-              source={require("./src/imgs/logomarca.png")}
+              
+              source={require("./src/imgs/logo_1.png")}
             />
           </View>
          
@@ -180,13 +164,14 @@ export default class App extends Component {
               justifyContent: 'flex-start'
             }}
           >
-            <View style={styles.containerShare}>
-              <TO onPress={() => this.handleShare()}>
-                <Icon name="share-alt" size={30} color="black" />
-              </TO>
-            </View>
             
+          <TO style={styles.containerShare} onPress={() => this.handleShare()}>
+            <Icon name="share-alt" size={50} color="black" />
+          </TO>
           </View>
+          <TO onPress={() => Linking.openURL(siteLink)} >
+            <Text style={styles.containerTexto}>WWW.RADIOMOLOCO.VIPFM.NET</Text>
+          </TO>
 
         </LinearGradient>
       </View>
@@ -199,12 +184,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+  containerTexto:{
+    marginTop: 10,
+    fontFamily: 'Arial',
+    fontSize: 18,
+    color: 'black'
+  },
   containerLogo: {
     width: 154,
     height: 154,
     borderRadius: 95,
     alignItems: "center",
-    backgroundColor: "#EDE9C1",
+    backgroundColor: "#000000",
     justifyContent: "center",
     borderWidth: 4,
     //borderColor: "#B0ADAA",
@@ -216,18 +207,15 @@ const styles = StyleSheet.create({
   containerPlay: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: Dimensions.get('window').width*0.10
+    marginTop: Dimensions.get('window').height*0.05
+  },
+
+  containerIcons:{
+    padding: 30,
+    marginLeft: 10
   },
   containerShare: {
-    width: 60,
-    height: 60,
-    alignItems: "center",
-    backgroundColor: "#d6d3d3",
-    justifyContent: "center",
-    borderWidth: 4,
-    borderColor: "black",
-    borderRadius: 50,
-    margin: 10
+    marginTop: Dimensions.get('window').height*0.03
   },
   containerClose: {
     width: 50,
@@ -242,9 +230,7 @@ const styles = StyleSheet.create({
   },
   containerGradient: {
     width: "100%",
-    //flex: 1,
     height: Dimensions.get('window').height,
     alignItems: "center",
-    //justifyContent: "center"
   }
 });
