@@ -38,12 +38,12 @@ TrackPlayer.updateOptions({
   ]
 });
 
-const shareLink = (Platform.OS == 'ios'
-                  ?  'https://apps.apple.com/br/app/r%C3%A1dio-moloco/id1489473868'
-                  : 'https://play.google.com/store/apps/details?id=br.com.radiomoloco')
+const shareLink =
+  Platform.OS == "ios"
+    ? "https://apps.apple.com/br/app/r%C3%A1dio-moloco/id1489473868"
+    : "https://play.google.com/store/apps/details?id=br.com.radiomoloco";
 
 export default class App extends Component {
-  
   state = {
     isPlaying: true
   };
@@ -62,8 +62,8 @@ export default class App extends Component {
     TrackPlayer.destroy();
     RNExitApp.exitApp();
   }
-  
-  async handleShare(){
+
+  async handleShare() {
     const shareText = {
       title: "Compartilhe a Rádio Moloco com seus amigos!",
       message:
@@ -72,60 +72,85 @@ export default class App extends Component {
       subject: "Rádio Moloco!",
       failOnCancel: false
     };
-    await Share.open(shareText)
+    await Share.open(shareText);
   }
 
   render() {
-    const whatsappLink = 'whatsapp://send?text=&phone=5562985583695'
-    const facebookLink = `https://www.facebook.com/radiomoloco/`
-    const instagramLink = 'https://www.instagram.com/radio_moloco/'
-    const siteLink = 'https://radiomoloco.vipfm.net/'
-   
+    const whatsappLink = "whatsapp://send?text=&phone=5562985583695";
+    const facebookLink = `https://www.facebook.com/radiomoloco/`;
+    const instagramLink = "https://www.instagram.com/radio_moloco/";
+    const siteLink = "https://radiomoloco.vipfm.net/";
+
     return (
-      <View style={{ height: Dimensions.get('window').height, width: "100%" }}>
+      <View style={{ height: Dimensions.get("window").height, width: "100%" }}>
         <LinearGradient
           style={styles.containerGradient}
           colors={["#EEE5A2", "#E9CD6A", "#E3C04D"]}
         >
           <ImageBackground
             source={require("./src/imgs/Imagem-mulher2.png")}
-            style={{ height: Dimensions.get('window').height*0.4, width: "100%" }}
+            style={{
+              height: Dimensions.get("window").height * 0.4,
+              width: "100%"
+            }}
           >
-            
-            <View style={{padding: 10, marginTop: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                <TO onPress={() => Linking.canOpenURL(whatsappLink)
-                                    .then(supported =>{
-                                      if(supported){
-                                        Linking.openURL(whatsappLink)
-                                      }
-                                      else{
-                                        Alert.alert("Não é possível realizar essa ação",
-                                         "Você não possui whatsapp em seu dispositivo! Baixe e tente novamente")
-                                      }
-                                    }).catch(e => console.log(e))
-                                    }>
-                  <Icon style={styles.containerIcons} name="whatsapp" size={60} color="yellow" />
-                </TO>
-            
-              
-                <TO onPress={() => Linking.openURL(facebookLink)}>
-                  <Icon style={styles.containerIcons} name="facebook-square" size={60} color="yellow" />
-                </TO>
-              
-                <TO onPress={() => Linking.openURL(instagramLink)}>
-                  <Icon style={styles.containerIcons} name="instagram" size={60} color="yellow" />
-                </TO>
-                </View>
-    
+            <View
+              style={{
+                padding: 10,
+                marginTop: 25,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <TO
+                onPress={() =>
+                  Linking.canOpenURL(whatsappLink)
+                    .then(supported => {
+                      if (supported) {
+                        Linking.openURL(whatsappLink);
+                      } else {
+                        Alert.alert(
+                          "Não é possível realizar essa ação",
+                          "Você não possui whatsapp em seu dispositivo! Baixe e tente novamente"
+                        );
+                      }
+                    })
+                    .catch(e => console.log(e))
+                }
+              >
+                <Icon
+                  style={styles.containerIcons}
+                  name="whatsapp"
+                  size={60}
+                  color="yellow"
+                />
+              </TO>
+
+              <TO onPress={() => Linking.openURL(facebookLink)}>
+                <Icon
+                  style={styles.containerIcons}
+                  name="facebook-square"
+                  size={60}
+                  color="yellow"
+                />
+              </TO>
+
+              <TO onPress={() => Linking.openURL(instagramLink)}>
+                <Icon
+                  style={styles.containerIcons}
+                  name="instagram"
+                  size={60}
+                  color="yellow"
+                />
+              </TO>
+            </View>
           </ImageBackground>
-      
+
           <View style={styles.containerLogo}>
-            <Image
-              
-              source={require("./src/imgs/logo_1.png")}
-            />
+            <Image source={require("./src/imgs/logo_1.png")} />
           </View>
-         
+
           <View style={styles.containerPlay}>
             <TWF
               onPress={() => {
@@ -154,25 +179,26 @@ export default class App extends Component {
               </View>
             </TWF>
           </View>
-         
+
           <View
             style={{
-              flexDirection: 'row',
-              marginTop: Dimensions.get('window').width*0.03,
-              display:'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start'
+              flexDirection: "row",
+              marginTop: Dimensions.get("window").width * 0.03,
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "flex-start"
             }}
           >
-            
-          <TO style={styles.containerShare} onPress={() => this.handleShare()}>
-            <Icon name="share-alt" size={50} color="black" />
-          </TO>
+            <TO
+              style={styles.containerShare}
+              onPress={() => this.handleShare()}
+            >
+              <Icon name="share-alt" size={50} color="black" />
+            </TO>
           </View>
-          <TO onPress={() => Linking.openURL(siteLink)} >
+          <TO onPress={() => Linking.openURL(siteLink)}>
             <Text style={styles.containerTexto}>WWW.RADIOMOLOCO.VIPFM.NET</Text>
           </TO>
-
         </LinearGradient>
       </View>
     );
@@ -184,11 +210,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  containerTexto:{
+  containerTexto: {
     marginTop: 10,
-    fontFamily: 'Arial',
+    fontFamily: "Arial",
     fontSize: 18,
-    color: 'black'
+    color: "black"
   },
   containerLogo: {
     width: 154,
@@ -207,15 +233,15 @@ const styles = StyleSheet.create({
   containerPlay: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: Dimensions.get('window').height*0.05
+    marginTop: Dimensions.get("window").height * 0.05
   },
 
-  containerIcons:{
+  containerIcons: {
     padding: 30,
     marginLeft: 10
   },
   containerShare: {
-    marginTop: Dimensions.get('window').height*0.03
+    marginTop: Dimensions.get("window").height * 0.03
   },
   containerClose: {
     width: 50,
@@ -226,11 +252,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     borderRadius: 50,
-    marginLeft: 10,
+    marginLeft: 10
   },
   containerGradient: {
     width: "100%",
-    height: Dimensions.get('window').height,
-    alignItems: "center",
+    height: Dimensions.get("window").height,
+    alignItems: "center"
   }
 });
