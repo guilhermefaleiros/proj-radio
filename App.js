@@ -76,7 +76,8 @@ export default class App extends Component {
   }
 
   render() {
-    const whatsappLink = "http://api.whatsapp.com/send?1=pt_BR&phone=5562985583695";
+    const whatsappLink =
+      "https://api.whatsapp.com/send?1=pt_BR&phone=5562985583695";
     const facebookLink = `https://www.facebook.com/radiomoloco/`;
     const instagramLink = "https://www.instagram.com/radio_moloco/";
     const siteLink = "https://radiomoloco.vipfm.net/";
@@ -197,7 +198,13 @@ export default class App extends Component {
             </TO>
           </View>
           <TO onPress={() => Linking.openURL(siteLink)}>
-            <Text style={styles.containerTexto}>WWW.RADIOMOLOCO.VIPFM.NET</Text>
+            <Text
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
+              style={styles.containerTexto}
+            >
+              WWW.RADIOMOLOCO.VIPFM.NET
+            </Text>
           </TO>
         </LinearGradient>
       </View>
